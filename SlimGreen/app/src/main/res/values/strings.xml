@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Slim and Green</string>
+
+    <string name="welcome">Bienvenido a SlimGreen. Inicia sesión para disfrutar de los beneficios que tenemos para tí</string>
+    <string name="usuario">Ingresa tu nombre de usuario</string>
+    <string name="pass">Ingresa tu contraseña</string>
+    <string name="login">Iniciar Sesión</string>
+    <string name="login_error">No se ha podido iniciar sesión. Usuario o contraseña incorrectos</string>
+    <string name="btn_responder">Responder</string>
+    <string name="btn_responder2">Responder Nuevamente</string>
+
+    <string name="btn_sugerencias">Ver servicios sugeridos</string>
+    <string name="btn_buscar">Buscar servicios</string>
+
+    <string name="restaurantinfo">Clic para ver detalle</string>
+
+    <string name="opiniones">Mira qué opina la gente</string>
+    <string name="addComentario">Cuéntale a todos algo sobre este restaurante</string>
+    <string name="comentario">Escribe tu comentario.</string>
+    <string name="fomularioIncompleto">No has llenado el formulario que nos permite conocerte.</string>
+
+    <string name="registro">No tengo una cuenta. Quiero Registrarme</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_detalle_servicio">Detalle del Servicio</string>
+
+    <string name="action_close">Salir</string>
+    <string name="action_logout">Cerrar Sesión</string>
+
+    <string name="editPerfil">Editar Perfil</string>
+
+
+
+</resources>
