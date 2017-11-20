@@ -39,7 +39,7 @@
             android:value="AIzaSyCHA43ZC8Qqhpfnec6F9vPC8IXiHltaI6E" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".GestorMapas"
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".DetalleServicio"

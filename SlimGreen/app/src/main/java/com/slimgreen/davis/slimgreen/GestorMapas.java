@@ -19,7 +19,7 @@ import com.slimgreen.davis.slimgreen.Modelo.Servicio;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
+public class GestorMapas extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
 
     private GoogleMap mMap;
     private ArrayList<Servicio> servicios;
@@ -35,7 +35,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent i = getIntent();
         servicios = (ArrayList<Servicio>) i.getSerializableExtra("servicios");
-        Toast.makeText(MapsActivity.this, "Servicios encontrados : " + servicios.size(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(GestorMapas.this, "Servicios encontrados : " + servicios.size(), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -52,7 +52,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        //Para todos los servicios se agrega un marcador con titulo, snippet e icono personalizado
         for(Servicio s :servicios){
             LatLng coordenadas = new LatLng(s.getLatitud(), s.getLongitud());
             builder.include(coordenadas);
@@ -63,17 +65,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.store)));
             marker.setTag(s);
         }
-        /*LatLng sydney = new LatLng(4.689303, -74.039898);
-        Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(sydney)
-                .title("Restaurante Zoe")
-                .snippet("ABIERTO")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.store)));
-        marker.setTag("hola amigo :v");
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
-        mMap.setOnInfoWindowClickListener(this);*/
+        //Se ajusta la cámara para asegurarse de que todos los markers son mostrados en pantalla
         LatLngBounds bounds = builder.build();
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;
@@ -82,9 +75,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
         mMap.animateCamera(cu);
 
-        /*LatLng c = new LatLng(servicios.get(0).getLatitud(), servicios.get(0).getLongitud());
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(c));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));*/
 
         mMap.setOnInfoWindowClickListener(this);
     }
@@ -92,11 +82,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onInfoWindowClick(Marker marker) {
         Servicio servicioClicked = (Servicio)marker.getTag();
-        Intent i = new Intent(MapsActivity.this, DetalleServicio.class);
+        Intent i = new Intent(GestorMapas.this, DetalleServicio.class);
         i.putExtra("servicio", servicioClicked);
         startActivity(i);
 
 
-        //Toast.makeText(MapsActivity.this, "Marker TAG: " + servicioClicked.getNombre(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(GestorMapas.this, "Marker TAG: " + servicioClicked.getNombre(), Toast.LENGTH_SHORT).show();
     }
 }

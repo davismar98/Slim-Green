@@ -31,6 +31,8 @@ public class Login extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+
+        //se verifica si hay una sesión iniciada. Si sí, se cambia a la actividad del servicio; si no, se carga el login
         userLogged = checkUserStatus();
         if(userLogged)
         {

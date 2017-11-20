@@ -138,7 +138,7 @@ public class GestorFomulario extends AppCompatActivity {
                         servicios = new JsonConverter<Servicio>().toArrayList(s, Servicio.class);
                         //Toast.makeText(SlimGreenService.this, "Restaurantes encontrados: " + servicios.size(), Toast.LENGTH_SHORT).show();
 
-                        Intent i = new Intent(SlimGreenService.this, MapsActivity.class);
+                        Intent i = new Intent(SlimGreenService.this, GestorMapas.class);
                         i.putExtra("servicios", servicios);
                         startActivity(i);
                         */

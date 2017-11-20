@@ -3,10 +3,8 @@ package com.slimgreen.davis.slimgreen;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,10 +17,6 @@ import com.kosalgeek.genasync12.PostResponseAsyncTask;
 import com.slimgreen.davis.slimgreen.Modelo.Respuesta;
 import com.slimgreen.davis.slimgreen.Modelo.Servicio;
 import com.slimgreen.davis.slimgreen.Modelo.Usuario;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,15 +62,18 @@ public class SlimGreenService extends AppCompatActivity implements AsyncResponse
             public void onClick(View v) {
 
                 if(formularioCompletado){
+
+                    //Se crea la tarea para traer las sugerencias en JSON
                     HashMap data = new HashMap();
+                    //Se envían las respuestas del usuario al PHP
                     data.put("respuestas", respuesta);
 
                     PostResponseAsyncTask task = new PostResponseAsyncTask(SlimGreenService.this, data, new AsyncResponse() {
                         @Override
                         public void processFinish(String s) {
                             servicios = new JsonConverter<Servicio>().toArrayList(s, Servicio.class);
-                            //Toast.makeText(SlimGreenService.this, "Restaurantes encontrados: " + servicios.size(), Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(SlimGreenService.this, MapsActivity.class);
+                            //Se carga el gestor de mapas con la lista de servicios traidos del servidor
+                            Intent i = new Intent(SlimGreenService.this, GestorMapas.class);
                             i.putExtra("servicios", servicios);
                             startActivity(i);
                         }
@@ -94,12 +91,13 @@ public class SlimGreenService extends AppCompatActivity implements AsyncResponse
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Se traen todos los servicios disponiles del servidor
                 PostResponseAsyncTask task = new PostResponseAsyncTask(SlimGreenService.this, new AsyncResponse() {
                     @Override
                     public void processFinish(String s) {
                         servicios = new JsonConverter<Servicio>().toArrayList(s, Servicio.class);
                         //Toast.makeText(SlimGreenService.this, "Restaurantes encontrados: " + servicios.size(), Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(SlimGreenService.this, MapsActivity.class);
+                        Intent i = new Intent(SlimGreenService.this, GestorMapas.class);
                         i.putExtra("servicios", servicios);
                         startActivity(i);
                     }
@@ -108,6 +106,7 @@ public class SlimGreenService extends AppCompatActivity implements AsyncResponse
             }
         });
 
+        //se verifica si hay una sesión y se trae el username
         userLogged = checkUserStatus();
         if(userLogged)
             username = getUserLogged();
@@ -127,6 +126,7 @@ public class SlimGreenService extends AppCompatActivity implements AsyncResponse
 
     @Override
     public void processFinish(String s) {
+        //se convierte el JSON en objetos tipo Usuario
         usuarios = new JsonConverter<Usuario>().toArrayList(s, Usuario.class);
         Usuario u = usuarios.get(0);
 
@@ -192,77 +192,6 @@ public class SlimGreenService extends AppCompatActivity implements AsyncResponse
 
         return super.onOptionsItemSelected(item);
     }
-
-    /*private void getSugerencias(){
-        query = Queries.selectUltimaRespuesta;
-
-        if (!query.isEmpty()) {
-            //this.infoBox.setText("Downloading...");
-            respuestas.clear();
-            new DownloadWebpageTask(new AsyncResult() {
-                @Override
-                public void onResult(JSONObject object) {
-                    processJson(object);
-                }
-            }).execute(query);
-        }
-    }
-
-
-    private void processJson(JSONObject object) {
-
-        try {
-            JSONArray rows = object.getJSONArray("rows");
-
-            for (int r = 0; r < rows.length(); ++r) {
-                JSONObject row = rows.getJSONObject(r);
-                JSONArray columns = row.getJSONArray("c");
-                String fecha = columns.getJSONObject(0).getString("f");
-                String pregunta1 = columns.getJSONObject(1).getString("v");
-                String pregunta2 = columns.getJSONObject(2).getString("v");
-                String pregunta3 = columns.getJSONObject(3).getString("v");
-                String pregunta4 = columns.getJSONObject(4).getString("v");
-                String pregunta5 = columns.getJSONObject(5).getString("v");
-                String pregunta6 = columns.getJSONObject(6).getString("v");
-                String pregunta7 = columns.getJSONObject(7).getString("v");
-                String pregunta8 = columns.getJSONObject(8).getString("v");
-                String pregunta9 = columns.getJSONObject(9).getString("v");
-                String pregunta10 = columns.getJSONObject(10).getString("v");
-
-
-                Respuesta resp = new Respuesta(fecha, pregunta1, pregunta2, pregunta3, pregunta4, pregunta5, pregunta6, pregunta7, pregunta8, pregunta9, pregunta10);
-                respuestas.add(resp);
-            }
-            if(!respuestas.isEmpty()){
-                String respuesta = respuestas.get(0).getRespuesta();
-                HashMap data = new HashMap();
-                data.put("respuestas", respuesta);
-
-                PostResponseAsyncTask task = new PostResponseAsyncTask(SlimGreenService.this, data, new AsyncResponse() {
-                    @Override
-                    public void processFinish(String s) {
-                        servicios = new JsonConverter<Servicio>().toArrayList(s, Servicio.class);
-                        //Toast.makeText(SlimGreenService.this, "Restaurantes encontrados: " + servicios.size(), Toast.LENGTH_SHORT).show();
-
-                        Intent i = new Intent(SlimGreenService.this, MapsActivity.class);
-                        i.putExtra("servicios", servicios);
-                        startActivity(i);
-                    }
-                });
-                task.execute("http://10.0.2.2/SlimGreen/getSugerencias.php");
-
-                Log.d("Respuesta", respuestas.get(0).getRespuesta());
-                //Toast.makeText(SlimGreenService.this, respuestas.get(0).getRespuesta(), Toast.LENGTH_SHORT).show();
-
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }*/
-
-
 
     protected boolean checkUserStatus(){
         boolean isLoggedIn ;
